@@ -1,5 +1,5 @@
-# tic-tac-toe
-
+# tic-tac-toe vue
+A very simple tic-tac-toe game with CPU opponent written in Vue.js 
 ## Project setup
 ```
 yarn install
