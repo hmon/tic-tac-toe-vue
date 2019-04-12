@@ -1,5 +1,8 @@
+[![Build Status](https://travis-ci.org/hmon/tic-tac-toe-vue.svg?branch=master)](https://travis-ci.org/hmon/tic-tac-toe-vue)
 # tic-tac-toe vue
-A very simple tic-tac-toe game with CPU opponent written in Vue.js 
+A very simple tic-tac-toe game with CPU opponent written in Vue.js
+
+Demo: [Github Pages](https://hmon.github.io/tic-tac-toe-vue/)
 ## Project setup
 ```
 yarn install
