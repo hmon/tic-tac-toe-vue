@@ -19,20 +19,18 @@
     },
     methods: {
       playerClick() {
-        const { toggle } = this.$parent;
-        if (toggle[this.id] !== 0) {
+        const { toggle, finished } = this.$parent;
+        if (toggle[this.id] !== 0 || finished) {
           return;
         }
-        Bus.$emit('playerClick', this.id);
-      }
-    },
-    mounted() {
-      Bus.$on(`click-${this.id}`, (n) => {
+        this.$emit('playerClick', this.id);
+      },
+      select(n) {
         n === 3 ? this.user = true : this.ai = true;
-      });
-      Bus.$on(`bg-${this.id}`, (color) => {
+      },
+      paint(color) {
         this.background = color;
-      });
+      }
     }
   }
 </script>

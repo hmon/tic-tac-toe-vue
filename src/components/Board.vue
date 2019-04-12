@@ -1,6 +1,6 @@
 <template>
   <div id="board" :style="{height}">
-    <Cell v-for="(value, key) in toggle" :id="key"></Cell>
+    <Cell v-for="(value, key) in toggle" :id="key" :ref="key" @playerClick="playerClick"></Cell>
   </div>
 </template>
 
@@ -14,6 +14,7 @@
     data() {
       return {
         height: '0',
+        finished: false,
         toggle: {
           "t11":0,
           "t12":0,
@@ -46,23 +47,26 @@
       playerClick(id) {
         const { toggle, rowsets } = this;
         this.setClick(3, id);
-        rowsets.every((rowset) => {
+        const resume = rowsets.every((rowset) => {
           if (toggle[rowset[0]] + toggle[rowset[1]] + toggle[rowset[2]] === 9) {
-            rowset.forEach(id => Bus.$emit(`bg-${id}`, 'red'));
+            rowset.forEach(id => this.paint(id, 'red'));
             alert("You win, player!");
+            this.finished = true;
             return false;
           }
           return true;
         });
+        if (!resume) return;
         if (this.empties.length === 0) {
           alert("Draw Match!");
+          this.finished = true;
           return;
         }
         this.startAI(id);
       },
       setClick(n, id) {
         // 3 is user and 1 is AI
-        Bus.$emit(`click-${id}`, n);
+        this.$refs[id][0].select(n);
         this.toggle[id] = n;
       },
       startAI(id) {
@@ -79,8 +83,9 @@
             else {
               this.setClick(1, rowset[2]);
             }
-            rowset.forEach(id => Bus.$emit(`bg-${id}`, 'red'));
+            rowset.forEach(id => this.paint(id, 'red'));
             alert("Cyborg wins!");
+            this.finished = true;
             return;
           }
         }
@@ -146,6 +151,9 @@
           return;
         }
       },
+      paint(id, color) {
+        this.$refs[id][0].paint(color);
+      },
       setHeight() {
         this.height = getComputedStyle(this.$el, '').getPropertyValue('width');
       }
@@ -154,9 +162,6 @@
       this.setHeight();
       window.addEventListener('resize', () => {
         this.setHeight();
-      });
-      Bus.$on('playerClick', (id) => {
-        this.playerClick(id);
       });
     }
   }
