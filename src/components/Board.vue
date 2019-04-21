@@ -16,25 +16,25 @@
         height: '0',
         finished: false,
         toggle: {
-          "t11":0,
-          "t12":0,
-          "t13":0,
-          "t21":0,
-          "t22":0,
-          "t23":0,
-          "t31":0,
-          "t32":0,
-          "t33":0
+          "t11": 0,
+          "t12": 0,
+          "t13": 0,
+          "t21": 0,
+          "t22": 0,
+          "t23": 0,
+          "t31": 0,
+          "t32": 0,
+          "t33": 0
         },
         rowsets: [
-          ['t11','t12','t13'],
-          ['t21','t22','t23'],
-          ['t31','t32','t33'],
-          ['t11','t21','t31'],
-          ['t12','t22','t32'],
-          ['t13','t23','t33'],
-          ['t11','t22','t33'],
-          ['t13','t22','t31']
+          ['t11', 't12', 't13'],
+          ['t21', 't22', 't23'],
+          ['t31', 't32', 't33'],
+          ['t11', 't21', 't31'],
+          ['t12', 't22', 't32'],
+          ['t13', 't23', 't33'],
+          ['t11', 't22', 't33'],
+          ['t13', 't22', 't31']
         ],
       }
     },
@@ -46,6 +46,12 @@
     methods: {
       playerClick(id) {
         const { toggle, rowsets } = this;
+
+        if (this.finished) {
+          this.reload();
+          this.finished = false;
+        }
+
         this.setClick(3, id);
         const resume = rowsets.every((rowset) => {
           if (toggle[rowset[0]] + toggle[rowset[1]] + toggle[rowset[2]] === 9) {
@@ -72,15 +78,13 @@
       startAI(id) {
         const { toggle, rowsets } = this;
         for (let rowset of rowsets) {
-          if(toggle[rowset[0]] + toggle[rowset[1]] + toggle[rowset[2]] === 2) {
+          if (toggle[rowset[0]] + toggle[rowset[1]] + toggle[rowset[2]] === 2) {
             // Winpoint!
             if (toggle[rowset[0]] === 0) {
               this.setClick(1, rowset[0]);
-            }
-            else if (toggle[rowset[1]] === 0) {
+            } else if (toggle[rowset[1]] === 0) {
               this.setClick(1, rowset[1]);
-            }
-            else {
+            } else {
               this.setClick(1, rowset[2]);
             }
             rowset.forEach(id => this.paint(id, 'red'));
@@ -90,17 +94,15 @@
           }
         }
         for (let rowset of rowsets) {
-          if(toggle[rowset[0]] + toggle[rowset[1]] + toggle[rowset[2]] === 6) {
+          if (toggle[rowset[0]] + toggle[rowset[1]] + toggle[rowset[2]] === 6) {
             // Blockpoint!
             if (toggle[rowset[0]] === 0) {
               this.setClick(1, rowset[0]);
               return;
-            }
-            else if (toggle[rowset[1]] === 0) {
+            } else if (toggle[rowset[1]] === 0) {
               this.setClick(1, rowset[1]);
               return;
-            }
-            else {
+            } else {
               this.setClick(1, rowset[2]);
               return;
             }
@@ -108,13 +110,13 @@
         }
         if (Math.random() >= 0.5) {
           if ((id !== 't11') && (id !== 't13') && (id !== 't31') && (id !== 't33')) {
-            if(toggle['t11'] === 0) {
+            if (toggle['t11'] === 0) {
               this.setClick(1, 't11')
               return;
-            } else if(toggle['t13'] === 0) {
+            } else if (toggle['t13'] === 0) {
               this.setClick(1, 't13')
               return;
-            } else if(toggle['t31'] === 0) {
+            } else if (toggle['t31'] === 0) {
               this.setClick(1, 't31')
               return;
             } else {
@@ -125,26 +127,21 @@
             if (toggle['t22'] === 0) {
               this.setClick(1, 't22')
               return;
-            }
-            else if(toggle['t21'] === 0) {
+            } else if (toggle['t21'] === 0) {
               this.setClick(1, 't21')
               return;
-            }
-            else if(toggle['t12'] === 0) {
+            } else if (toggle['t12'] === 0) {
               this.setClick(1, 't12')
               return;
-            }
-            else if(toggle['t23'] === 0) {
+            } else if (toggle['t23'] === 0) {
               this.setClick(1, 't23')
               return;
-            }
-            else {
+            } else {
               this.setClick(1, 't32')
               return;
             }
           }
-        }
-        else {
+        } else {
           //do the random input
           const rkey = this.empties[Math.floor(this.empties.length * Math.random())];
           this.setClick(1, rkey);
@@ -156,6 +153,12 @@
       },
       setHeight() {
         this.height = getComputedStyle(this.$el, '').getPropertyValue('width');
+      },
+      reload() {
+        Object.keys(this.toggle).forEach((key) => {
+          this.setClick(0, key);
+          this.paint(key, 'silver');
+        })
       }
     },
     mounted() {
@@ -168,11 +171,11 @@
 </script>
 
 <style scoped>
-#board {
-  margin-left:auto;
-  margin-right:auto;
-  width:40%;
-  background-color:silver;
-  overflow:hidden;
-}
+  #board {
+    margin-left: auto;
+    margin-right: auto;
+    width: 40%;
+    background-color: silver;
+    overflow: hidden;
+  }
 </style>
