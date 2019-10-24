@@ -1,8 +1,8 @@
 <template>
   <div @click="playerClick" class="ticCell" :style="{background}">
     <span class="helper"></span>
-    <img src="usericon.png" v-show="user"/>
-    <img src="pcicon.png" v-show="ai"/>
+    <img src="usericon.png" v-show="user" />
+    <img src="pcicon.png" v-show="ai" />
   </div>
 </template>
 
@@ -20,13 +20,18 @@
     methods: {
       playerClick() {
         const { toggle, finished } = this.$parent;
-        if (toggle[this.id] !== 0 || finished) {
+        if (toggle[this.id] !== 0 && !finished) {
           return;
         }
         this.$emit('playerClick', this.id);
       },
       select(n) {
-        n === 3 ? this.user = true : this.ai = true;
+        if (n === 0) {
+          this.user = false
+          this.ai = false
+        } else {
+          n === 3 ? this.user = true : this.ai = true;
+        }
       },
       paint(color) {
         this.background = color;
@@ -37,13 +42,13 @@
 
 <style scoped>
   .ticCell {
-    border-style:solid;
-    border-width:1px;
-    height:calc((100% - 6px) / 3);
-    width:calc((100% - 6px) / 3);
-    display:block;
-    float:left;
-    text-align:center;
+    border-style: solid;
+    border-width: 1px;
+    height: calc((100% - 6px) / 3);
+    width: calc((100% - 6px) / 3);
+    display: block;
+    float: left;
+    text-align: center;
   }
 
   .helper {
@@ -54,7 +59,7 @@
 
   img {
     vertical-align: middle;
-    height:80%;
-    width:80%;
+    height: 80%;
+    width: 80%;
   }
 </style>
